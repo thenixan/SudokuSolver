@@ -1,6 +1,5 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm'
-    id 'application'
 }
 
 group 'com.seemsnerdy'
@@ -8,14 +7,6 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-}
-
-mainClassName = 'com.seemsnerdy.sudokusolver.Main'
-
-jar {
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
 }
 
 dependencies {
