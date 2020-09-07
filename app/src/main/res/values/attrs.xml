@@ -1,0 +1,9 @@
+<resources>
+    <declare-styleable name="SudokuCellView">
+        <attr name="solutionNumberSize" format="dimension" />
+        <attr name="notedNumberSize" format="dimension" />
+        <attr name="solutionNumberColor" format="color" />
+        <attr name="notedNumberColor" format="color" />
+        <attr name="innerPadding" format="dimension" />
+    </declare-styleable>
+</resources>
