@@ -5,10 +5,6 @@ import android.os.Parcelable
 
 sealed class SudokuCellContent : Parcelable {
 
-    enum class ParcelType {
-        Note, Solution
-    }
-
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -69,5 +65,9 @@ sealed class SudokuCellContent : Parcelable {
     }
 }
 
-private fun Parcel.readType() = readInt().let { SudokuCellContent.ParcelType.values()[it] }
-private fun Parcel.writeType(type: SudokuCellContent.ParcelType) = writeInt(type.ordinal)
+private enum class ParcelType {
+    Note, Solution
+}
+
+private fun Parcel.readType() = readInt().let { ParcelType.values()[it] }
+private fun Parcel.writeType(type: ParcelType) = writeInt(type.ordinal)
