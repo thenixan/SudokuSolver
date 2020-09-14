@@ -5,6 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
@@ -13,6 +15,7 @@ import androidx.core.content.res.getDimensionPixelSizeOrThrow
 import com.seemnerdy.sudokusolver.app.R
 import kotlin.math.max
 import kotlin.math.min
+
 
 class SudokuCellView @JvmOverloads constructor(
     context: Context,
@@ -126,6 +129,21 @@ class SudokuCellView @JvmOverloads constructor(
             field = value
             invalidate()
         }
+
+    override fun onSaveInstanceState(): Parcelable? =
+        SavedState(super.onSaveInstanceState()).apply {
+            content = sudokuCellContent
+        }
+
+    override fun onRestoreInstanceState(state: Parcelable?) =
+        when (state) {
+            is SavedState -> {
+                super.onRestoreInstanceState(state.superState)
+                sudokuCellContent = state.content
+            }
+            else -> super.onRestoreInstanceState(state)
+        }
+
 
     private var internalClipBounds = Rect()
 
@@ -258,6 +276,31 @@ class SudokuCellView @JvmOverloads constructor(
                     notedNumbersPaint
                 )
             }
+    }
+
+    internal class SavedState : BaseSavedState {
+        var content: SudokuCellContent? = null
+
+        constructor(source: Parcel?) : super(source) {
+            content = source
+                ?.readParcelable<SudokuCellContent?>(SudokuCellContent::class.java.classLoader)
+        }
+
+        constructor(superState: Parcelable?) : super(superState)
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+            out.writeParcelable(content, flags)
+        }
+
+        companion object {
+            @JvmField
+            val CREATOR = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(source: Parcel) = SavedState(source)
+
+                override fun newArray(size: Int) = arrayOfNulls<SavedState>(size)
+            }
+        }
     }
 
 }
