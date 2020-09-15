@@ -34,6 +34,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/solve_puzzle_button"
+        app:solutionNumberColor="?android:attr/textColorPrimary"
+        app:notedNumberColor="?android:attr/textColorPrimary"
         android:padding="2dp"
         app:innerPadding="2dp"
         app:notedNumberSize="16sp"

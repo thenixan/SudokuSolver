@@ -1,7 +1,6 @@
 package com.seemnerdy.sudokusolver.app
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
