@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
-import androidx.core.content.res.getDimensionPixelSizeOrThrow
 import com.seemnerdy.sudokusolver.app.R
 import kotlin.math.max
 import kotlin.math.min
@@ -36,9 +35,9 @@ class SudokuCellView @JvmOverloads constructor(
         ).apply {
             try {
                 solutionNumberSize =
-                    getDimensionPixelSizeOrThrow(R.styleable.SudokuCellView_solutionNumberSize)
+                    getDimensionPixelSize(R.styleable.SudokuCellView_solutionNumberSize, 60)
                 notedNumberSize =
-                    getDimensionPixelSizeOrThrow(R.styleable.SudokuCellView_notedNumberSize)
+                    getDimensionPixelSize(R.styleable.SudokuCellView_notedNumberSize, 32)
                 innerPadding = getDimensionPixelSize(R.styleable.SudokuCellView_innerPadding, 0)
                 solutionNumberColor =
                     getColor(R.styleable.SudokuCellView_solutionNumberColor, Color.BLACK)
@@ -236,16 +235,16 @@ class SudokuCellView @JvmOverloads constructor(
         val verticalSpacing = availableHeight / 3F
 
         (0 until 3)
-            .map { step -> horizontalSpacing / 2F + step * horizontalSpacing }
-            .map { it + paddingLeft }
-            .flatMap { x ->
+            .map { step -> verticalSpacing / 2F + step * verticalSpacing }
+            .map { it + paddingTop }
+            .map { coordinate -> coordinate - ((notedNumbersPaint.descent() + notedNumbersPaint.ascent()) / 2F) }
+            .flatMap { y ->
                 (0 until 3)
-                    .map { step -> verticalSpacing / 2F + step * verticalSpacing }
-                    .map { it + paddingTop }
-                    .map { coordinate -> coordinate - ((notedNumbersPaint.descent() + notedNumbersPaint.ascent()) / 2F) }
-                    .map { x to it }
+                    .map { step -> horizontalSpacing / 2F + step * horizontalSpacing }
+                    .map { it + paddingLeft }
+                    .map { it to y }
             }
-            .withIndex()
+            .withIndexFrom(1)
             .filter { sudokuCellContent.data.contains(it.index) }
             .forEach {
                 val text = it.index.toString()
@@ -262,8 +261,26 @@ class SudokuCellView @JvmOverloads constructor(
 
 }
 
+private fun <T> Iterable<T>.withIndexFrom(from: Int): Iterable<IndexedValue<T>> =
+    IndexingIterableWithStart(from) { iterator() }
+
 private fun Rect.mergeMax(other: Rect): Rect =
     Rect(0, 0, max(width(), other.width()), max(height(), other.height()))
 
 private fun Rect.stackOnTop(other: Rect): Rect =
     Rect(0, 0, max(width(), other.width()), height() + other.height())
+
+private class IndexingIteratorWithStart<out T>(from: Int, private val iterator: Iterator<T>) :
+    Iterator<IndexedValue<T>> {
+    private var index = from
+    override fun hasNext(): Boolean = iterator.hasNext()
+    override fun next(): IndexedValue<T> = IndexedValue(index++, iterator.next())
+}
+
+internal class IndexingIterableWithStart<out T>(
+    private val from: Int,
+    private val iteratorFactory: () -> Iterator<T>
+) : Iterable<IndexedValue<T>> {
+    override fun iterator(): Iterator<IndexedValue<T>> =
+        IndexingIteratorWithStart(from, iteratorFactory())
+}

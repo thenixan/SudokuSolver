@@ -1,42 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/puzzle_outcome_text"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/game_board"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello Sudoku Solver!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/solve_puzzle_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Solve puzzle!"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/puzzle_outcome_text" />
-
-    <com.seemnerdy.sudokusolver.app.view.SudokuCellView
-        android:id="@+id/test_puzzle_cell"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/solve_puzzle_button"
-        android:padding="2dp"
-        app:innerPadding="2dp"
-        app:notedNumberSize="16sp"
-        app:solutionNumberSize="16sp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
